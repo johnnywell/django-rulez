@@ -92,7 +92,9 @@ def get_roles(user, obj):
 
         relevant = obj.relevant_roles()
         for role in relevant:
-            if role.is_member(user, obj):
-                user_roles.append(role)
+            for rule in role.rules:
+                rule = getattr(obj, rule)
+                if rule(user, obj):
+                    user_roles.append(role)
         cache.set(roles_key(user, obj), user_roles, 1*HOUR)
         return user_roles
