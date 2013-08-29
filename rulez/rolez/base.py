@@ -12,3 +12,15 @@ class AbstractRole(object):
     @classmethod
     def is_member(cls, user, obj): #pragma: nocover
         raise NotImplemented
+
+    @classmethod
+    def evaluate_rules(cls, user, obj):
+        """
+        Avaluate all rules of the role for an user.
+        """
+        rules_number = len(cls.rules)
+        valid_rules = 0
+        for rule in cls.rules:
+            if rule(user, obj):
+                valid_rules += 1
+        return rules_number == valid_rules
