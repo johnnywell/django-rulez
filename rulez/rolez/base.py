@@ -21,6 +21,8 @@ class AbstractRole(object):
         rules_number = len(cls.rules)
         valid_rules = 0
         for rule in cls.rules:
-            if rule(user, obj):
-                valid_rules += 1
+            rule = getattr(cls, rule)
+            if callable(rule):
+                if rule(user, obj):
+                    valid_rules += 1
         return rules_number == valid_rules
